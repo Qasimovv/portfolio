@@ -16,6 +16,10 @@ export type AppProject = {
   /** Empty = grayed-out "not available" badge. */
   appStoreUrl?: string;
   playStoreUrl?: string;
+  /** true = built with a team/company → shown under the team section */
+  team?: boolean;
+  /** Small muted note under the app name, e.g. "Bakcell" */
+  company?: string;
 };
 
 export type PackageProject = {
@@ -89,8 +93,16 @@ export const contact = {
 
 // -------------------- Apps tab --------------------
 //  Paste real store links — empty ones show a grayed-out badge.
+//  Two groups: solo apps (default) and team/company work (team: true).
+//  Section headings below are editable too.
+
+export const appSections = {
+  solo: "my own apps",
+  team: "team & company work",
+};
 
 export const apps: AppProject[] = [
+  // ---- Built solo ----
   { id: "patches", name: "Patches", appStoreUrl: "", playStoreUrl: "" },
   { id: "mergio", name: "Mergio: 2048 Block Blast", appStoreUrl: "", playStoreUrl: "" },
   { id: "wend", name: "Wend", appStoreUrl: "", playStoreUrl: "" },
@@ -98,6 +110,16 @@ export const apps: AppProject[] = [
   { id: "recur", name: "Recur", appStoreUrl: "", playStoreUrl: "" },
   { id: "admobpulse", name: "AdMob Pulse", appStoreUrl: "", playStoreUrl: "" },
   { id: "infopulse", name: "InfoPulse AI", appStoreUrl: "", playStoreUrl: "" },
+
+  // ---- Built with teams / companies (team: true) ----
+  {
+    id: "bakcell",
+    name: "Bakcell",
+    team: true,
+    company: "Bakcell",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
 ];
 
 // -------------------- Packages tab --------------------

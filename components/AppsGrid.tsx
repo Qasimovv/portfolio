@@ -2,71 +2,105 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import type { AppProject } from "@/data/site";
+import { appSections, type AppProject } from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { fadeUp } from "@/lib/motion";
 
-// -------------------- Apps grid --------------------
+// -------------------- Apps grid (solo + team groups) --------------------
 
 export default function AppsGrid({ apps }: { apps: AppProject[] }) {
+  const groups = [
+    { key: "solo", label: appSections.solo, items: apps.filter((a) => !a.team) },
+    { key: "team", label: appSections.team, items: apps.filter((a) => a.team) },
+  ].filter((group) => group.items.length > 0);
+
   return (
-    <div className="relative">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8">
-        {apps.map((app, i) => (
-          <motion.div
-            key={app.id}
-            className="overflow-hidden rounded-3xl bg-white p-5 dark:bg-zinc-900"
-            {...fadeUp(i, 5)}
-          >
-            {/* Poster (or gradient placeholder until real one is added) */}
-            {app.poster ? (
-              <div className="mb-4 overflow-hidden rounded-[23.75px]">
-                <Image
-                  src={app.poster}
-                  alt={app.name}
-                  width={400}
-                  height={800}
-                  loading="lazy"
-                  className="h-auto w-full"
-                />
-              </div>
-            ) : (
-              <div
-                className="mb-4 flex aspect-[1/2] items-center justify-center rounded-[23.75px]"
-                style={{ background: gradientFor(app.id) }}
-              >
-                <span className="text-4xl font-bold text-white/90">
-                  {app.name.charAt(0)}
-                </span>
-              </div>
-            )}
-
-            <h3 className="text-center text-base font-semibold text-zinc-900 dark:text-zinc-100">
-              {app.name}
-            </h3>
-
-            {/* Store badges */}
-            <div className="mt-3 flex justify-center gap-2">
-              <StoreBadge
-                href={app.appStoreUrl}
-                src="/logo/app-store.svg"
-                available="Download on App Store"
-                unavailable="Not available on App Store"
-              />
-              <StoreBadge
-                href={app.playStoreUrl}
-                src="/logo/play-store.svg"
-                available="Get it on Google Play"
-                unavailable="Not available on Google Play"
-              />
-            </div>
-          </motion.div>
-        ))}
-      </div>
+    <div className="relative space-y-12">
+      {groups.map((group) => (
+        <section key={group.key}>
+          {groups.length > 1 && <GroupLabel text={group.label} />}
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8">
+            {group.items.map((app, i) => (
+              <AppCard key={app.id} app={app} index={i} />
+            ))}
+          </div>
+        </section>
+      ))}
 
       {/* Bottom fade into the page background */}
-      <div className="pointer-events-none absolute right-0 bottom-0 left-0 h-[60%] bg-gradient-to-b from-transparent to-zinc-50 dark:to-zinc-950" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-zinc-50 dark:to-zinc-950" />
     </div>
+  );
+}
+
+// -------------------- Group label --------------------
+
+function GroupLabel({ text }: { text: string }) {
+  return (
+    <div className="mb-6 flex items-center justify-center gap-4">
+      <span className="h-px w-12 bg-zinc-300 dark:bg-zinc-700" />
+      <span className="font-hand text-xl text-[#04AAFB]">{text}</span>
+      <span className="h-px w-12 bg-zinc-300 dark:bg-zinc-700" />
+    </div>
+  );
+}
+
+// -------------------- App card --------------------
+
+function AppCard({ app, index }: { app: AppProject; index: number }) {
+  return (
+    <motion.div
+      className="overflow-hidden rounded-3xl bg-white p-5 dark:bg-zinc-900"
+      {...fadeUp(index, 5)}
+    >
+      {/* Poster (or gradient placeholder until real one is added) */}
+      {app.poster ? (
+        <div className="mb-4 overflow-hidden rounded-[23.75px]">
+          <Image
+            src={app.poster}
+            alt={app.name}
+            width={400}
+            height={800}
+            loading="lazy"
+            className="h-auto w-full"
+          />
+        </div>
+      ) : (
+        <div
+          className="mb-4 flex aspect-[1/2] items-center justify-center rounded-[23.75px]"
+          style={{ background: gradientFor(app.id) }}
+        >
+          <span className="text-4xl font-bold text-white/90">
+            {app.name.charAt(0)}
+          </span>
+        </div>
+      )}
+
+      <h3 className="text-center text-base font-semibold text-zinc-900 dark:text-zinc-100">
+        {app.name}
+      </h3>
+      {app.company && (
+        <p className="mt-0.5 text-center text-xs text-zinc-400 dark:text-zinc-500">
+          {app.company}
+        </p>
+      )}
+
+      {/* Store badges */}
+      <div className="mt-3 flex justify-center gap-2">
+        <StoreBadge
+          href={app.appStoreUrl}
+          src="/logo/app-store.svg"
+          available="Download on App Store"
+          unavailable="Not available on App Store"
+        />
+        <StoreBadge
+          href={app.playStoreUrl}
+          src="/logo/play-store.svg"
+          available="Get it on Google Play"
+          unavailable="Not available on Google Play"
+        />
+      </div>
+    </motion.div>
   );
 }
 
