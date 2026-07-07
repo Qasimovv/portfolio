@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* -------------------- Fonts -------------------- */
+
+.font-hand {
+  font-family: var(--font-hand), cursive;
+}
+
+/* -------------------- Masonry (Packages / Other tabs) -------------------- */
+
+.masonry {
+  column-count: 1;
+  column-gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+
+.masonry-item {
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+
+/* -------------------- Gallery photo cards -------------------- */
+
+.gallery-photo {
+  transition:
+    transform 0.4s cubic-bezier(0.25, 0.4, 0.25, 1),
+    box-shadow 0.4s cubic-bezier(0.25, 0.4, 0.25, 1);
+}
+
+.gallery-photo:hover {
+  z-index: 10;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: rotate(0deg) scale(1.08) translateY(-8px) !important;
+}
+
+.gallery-photo:hover .gallery-photo-label {
+  opacity: 1;
+}
+
+/* -------------------- Lenis smooth scroll -------------------- */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
