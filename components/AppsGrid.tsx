@@ -16,16 +16,24 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
 
   return (
     <div className="relative space-y-12">
-      {groups.map((group) => (
-        <section key={group.key}>
-          {groups.length > 1 && <GroupLabel text={group.label} />}
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8">
-            {group.items.map((app, i) => (
-              <AppCard key={app.id} app={app} index={i} />
-            ))}
-          </div>
-        </section>
-      ))}
+      {groups.map((group) => {
+        // When every card is double-width, use even column counts so
+        // col-span-2 cards tile without leftover columns.
+        const allWide = group.items.every((a) => a.poster && a.poster2);
+        const gridClass = allWide
+          ? "grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6 2xl:grid-cols-8"
+          : "grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8";
+        return (
+          <section key={group.key}>
+            {groups.length > 1 && <GroupLabel text={group.label} />}
+            <div className={gridClass}>
+              {group.items.map((app, i) => (
+                <AppCard key={app.id} app={app} index={i} />
+              ))}
+            </div>
+          </section>
+        );
+      })}
 
       {/* Bottom fade into the page background */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-zinc-50 dark:to-zinc-950" />
