@@ -51,7 +51,7 @@ export const profile = {
   tagline: "20+ apps across iOS, Android & web",
   available: true,
   location: "Baku, Azerbaijan",
-  email: "gasimovelnur2019@gmail.com",
+  email: "elnurgasimovv@gmail.com",
   /** After adding public/avatar.jpg set "/avatar.jpg" — empty renders a gradient circle */
   avatar: "",
   /** After adding public/resume.pdf set "/resume.pdf" — empty hides the résumé row */
