@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Archive } from "lucide-react";
-import { appSections, type AppProject } from "@/data/site";
+import { appSections, moreApps, type AppProject } from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { fadeUp } from "@/lib/motion";
 
@@ -32,12 +32,47 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
                 <AppCard key={app.id} app={app} index={i} />
               ))}
             </div>
+            {group.key === "team" && moreApps.length > 0 && <MoreAppChips />}
           </section>
         );
       })}
 
       {/* Bottom fade into the page background */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-zinc-50 dark:to-zinc-950" />
+    </div>
+  );
+}
+
+// -------------------- More apps (logo chips) --------------------
+
+function MoreAppChips() {
+  return (
+    <div className="mt-10">
+      <GroupLabel text={appSections.more} />
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        {moreApps.map((app, i) => (
+          <motion.span
+            key={app.id}
+            {...fadeUp(i, 6)}
+            className="inline-flex items-center gap-2 rounded-full bg-white py-1.5 pl-2 pr-3.5 dark:bg-zinc-900"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={app.logo}
+              alt={app.name}
+              className="h-5 w-auto max-w-10 rounded-md"
+            />
+            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+              {app.name}
+            </span>
+            {app.company && (
+              <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                {app.company}
+              </span>
+            )}
+          </motion.span>
+        ))}
+      </div>
     </div>
   );
 }

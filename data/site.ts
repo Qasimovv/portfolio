@@ -45,6 +45,15 @@ export type OtherProject = {
   link: string;
 };
 
+export type MoreApp = {
+  id: string;
+  name: string;
+  /** Optional muted note after the name, e.g. "Azerconnect" */
+  company?: string;
+  /** Logo file under public/project/logo/ (any ratio — height is normalized) */
+  logo: string;
+};
+
 export type GalleryPhoto = {
   /** Image inside public/gallery/ — drop your own photos and update src */
   src: string;
@@ -108,6 +117,8 @@ export const contact = {
 export const appSections = {
   solo: "my own apps",
   team: "team & company work",
+  /** Label above the logo chips under the team group */
+  more: "…and more apps I’ve worked on",
 };
 
 export const apps: AppProject[] = [
@@ -182,6 +193,18 @@ export const apps: AppProject[] = [
     appStoreUrl: "",
     playStoreUrl: "",
   },
+];
+
+// -------------------- More team apps (logo chips) --------------------
+//  Apps shown as small logo+name chips under the team group.
+//  Scales to any count: drop the logo into public/project/logo/ and add
+//  one line here.
+
+export const moreApps: MoreApp[] = [
+  { id: "anipay", name: "AniPay", logo: "/project/logo/anipay.png" },
+  { id: "buylink", name: "BuyLink", logo: "/project/logo/buylink.png" },
+  { id: "inside", name: "Inside", logo: "/project/logo/inside.png" },
+  { id: "suyumaz", name: "Suyumaz", logo: "/project/logo/suyumaz.png" },
 ];
 
 // -------------------- Packages tab --------------------
