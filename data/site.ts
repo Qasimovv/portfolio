@@ -60,7 +60,7 @@ export const profile = {
   location: "Baku, Azerbaijan",
   email: "elnurgasimovv@gmail.com",
   /** After adding public/avatar.jpg set "/avatar.jpg" — empty renders a gradient circle */
-  avatar: "",
+  avatar: "/avatar.jpg",
   /** After adding public/resume.pdf set "/resume.pdf" — empty hides the résumé row */
   resumeUrl: "",
 };
