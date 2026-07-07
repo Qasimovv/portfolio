@@ -21,10 +21,10 @@ const kalam = Kalam({
 // -------------------- Metadata --------------------
 
 export const metadata: Metadata = {
-  title: `${profile.name} | Flutter Developer`,
+  title: `${profile.name} | ${profile.role}`,
   description: `${profile.role} building polished mobile games and apps. ${profile.tagline}. Based in ${profile.location}, open to freelance and contract work.`,
   openGraph: {
-    title: `${profile.name} | Flutter Developer`,
+    title: `${profile.name} | ${profile.role}`,
     description: `${profile.role} — ${profile.tagline}`,
     type: "website",
   },

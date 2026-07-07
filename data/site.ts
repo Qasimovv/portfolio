@@ -50,7 +50,7 @@ export type SocialKey = "instagram" | "x" | "linkedin" | "youtube" | "github";
 export const profile = {
   name: "Elnur Qasimov",
   /** Big hero heading */
-  role: "Senior Flutter Developer",
+  role: "Senior Mobile Engineer",
   /** Blue handwritten line under the heading */
   tagline: "20+ apps across iOS, Android & web",
   available: true,
@@ -68,9 +68,9 @@ export const profile = {
 export const socials: Record<SocialKey, string> = {
   instagram: "",
   x: "",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/elnur-gasimov-a0b30b20b",
   youtube: "",
-  github: "https://github.com/Qasimovv",
+  github: "",
 };
 
 // -------------------- Contact card --------------------
@@ -80,7 +80,7 @@ export const contact = {
   /** Segments with bold: true render emphasized */
   blurb: [
     { text: "I’ve built " },
-    { text: "20+ Flutter apps & games", bold: true },
+    { text: "20+ apps & games", bold: true },
     { text: " across iOS and Android, backed by " },
     { text: "shared packages", bold: true },
     { text: " and a " },
