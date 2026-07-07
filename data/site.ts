@@ -45,7 +45,7 @@ export type OtherProject = {
   link: string;
 };
 
-export type MoreApp = {
+export type RetiredApp = {
   id: string;
   name: string;
   /** Optional muted note after the name, e.g. "Azerconnect" */
@@ -117,8 +117,8 @@ export const contact = {
 export const appSections = {
   solo: "my own apps",
   team: "team & company work",
-  /** Label above the logo chips under the team group */
-  more: "…and more apps I’ve worked on",
+  /** Label above the retired-app logo chips under the team group */
+  retired: "no longer in production",
 };
 
 export const apps: AppProject[] = [
@@ -195,12 +195,12 @@ export const apps: AppProject[] = [
   },
 ];
 
-// -------------------- More team apps (logo chips) --------------------
-//  Apps shown as small logo+name chips under the team group.
-//  Scales to any count: drop the logo into public/project/logo/ and add
-//  one line here.
+// -------------------- Retired apps (logo chips) --------------------
+//  Apps that were taken out of production — shown as small logo+name
+//  chips under the team group. Scales to any count: drop the logo into
+//  public/project/logo/ and add one line here.
 
-export const moreApps: MoreApp[] = [
+export const retiredApps: RetiredApp[] = [
   { id: "anipay", name: "AniPay", logo: "/project/logo/anipay.png" },
   { id: "buylink", name: "BuyLink", logo: "/project/logo/buylink.png" },
   { id: "inside", name: "Inside", logo: "/project/logo/inside.png" },

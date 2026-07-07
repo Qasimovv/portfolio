@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Archive } from "lucide-react";
-import { appSections, moreApps, type AppProject } from "@/data/site";
+import { appSections, retiredApps, type AppProject } from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { fadeUp } from "@/lib/motion";
 
@@ -32,7 +32,9 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
                 <AppCard key={app.id} app={app} index={i} />
               ))}
             </div>
-            {group.key === "team" && moreApps.length > 0 && <MoreAppChips />}
+            {group.key === "team" && retiredApps.length > 0 && (
+              <RetiredAppChips />
+            )}
           </section>
         );
       })}
@@ -43,14 +45,14 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
   );
 }
 
-// -------------------- More apps (logo chips) --------------------
+// -------------------- Retired apps (logo chips) --------------------
 
-function MoreAppChips() {
+function RetiredAppChips() {
   return (
     <div className="mt-10">
-      <GroupLabel text={appSections.more} />
+      <GroupLabel text={appSections.retired} />
       <div className="flex flex-wrap items-center justify-center gap-2">
-        {moreApps.map((app, i) => (
+        {retiredApps.map((app, i) => (
           <motion.span
             key={app.id}
             {...fadeUp(i, 6)}

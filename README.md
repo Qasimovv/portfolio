@@ -28,6 +28,9 @@ All content lives in **one file**: [`data/site.ts`](data/site.ts)
   Apps that were taken out of production: set `retired: true` — badges are
   replaced by a "No longer in production" note (optional `logo` shown in it,
   file under `public/project/logo/`).
+- **retiredApps** — apps removed from production, shown as a logo+name chip
+  row under the team group ("no longer in production"). Add the logo to
+  `public/project/logo/` and one line here — scales to any count.
 - **packages / other** — masonry cards: name, description, link
 - **contact** — the "let’s work together" card copy (with bold segments)
 - **gallery** — draggable photo marquee (location + subtitle labels)
