@@ -48,16 +48,36 @@ function GroupLabel({ text }: { text: string }) {
 // -------------------- App card --------------------
 
 function AppCard({ app, index }: { app: AppProject; index: number }) {
+  const posters = [app.poster, app.poster2].filter(Boolean) as string[];
+  const wide = posters.length === 2;
+
   return (
     <motion.div
-      className="overflow-hidden rounded-3xl bg-white p-5 dark:bg-zinc-900"
+      className={`overflow-hidden rounded-3xl bg-white p-5 dark:bg-zinc-900 ${
+        wide ? "col-span-2" : ""
+      }`}
       {...fadeUp(index, 5)}
     >
-      {/* Poster (or gradient placeholder until real one is added) */}
-      {app.poster ? (
+      {/* Poster(s) — two images make the card double-width */}
+      {wide ? (
+        <div className="mb-4 grid grid-cols-2 gap-2">
+          {posters.map((poster) => (
+            <div key={poster} className="overflow-hidden rounded-2xl">
+              <Image
+                src={poster}
+                alt={app.name}
+                width={400}
+                height={800}
+                loading="lazy"
+                className="h-auto w-full"
+              />
+            </div>
+          ))}
+        </div>
+      ) : posters.length === 1 ? (
         <div className="mb-4 overflow-hidden rounded-[23.75px]">
           <Image
-            src={app.poster}
+            src={posters[0]}
             alt={app.name}
             width={400}
             height={800}

@@ -36,6 +36,7 @@ All content lives in **one file**: [`data/site.ts`](data/site.ts)
 | Profile photo | `public/avatar.jpg` | set `profile.avatar = "/avatar.jpg"` |
 | Résumé | `public/resume.pdf` | set `profile.resumeUrl = "/resume.pdf"` |
 | App posters (1:2, e.g. 400×800) | `public/project/poster/<id>.png` | set `apps[].poster = "/project/poster/<id>.png"` |
+| Second poster (optional) | `public/project/poster/<id>-2.png` | set `apps[].poster2` too → card becomes double-width with two images |
 | Gallery photos | `public/gallery/*.jpg` | update `gallery[].src` |
 
 Anything missing falls back to an **auto-generated gradient placeholder** — the

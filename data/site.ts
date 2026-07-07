@@ -13,6 +13,9 @@ export type AppProject = {
    *  public/project/poster/ and set "/project/poster/<id>.png" here.
    *  Left empty, a gradient placeholder is rendered. */
   poster?: string;
+  /** Optional second poster → the card becomes double-width and
+   *  shows both images side by side. */
+  poster2?: string;
   /** Empty = grayed-out "not available" badge. */
   appStoreUrl?: string;
   playStoreUrl?: string;
@@ -117,6 +120,8 @@ export const apps: AppProject[] = [
     name: "Bakcell",
     team: true,
     company: "Bakcell",
+    poster: "/project/poster/bakcell-1.webp",
+    poster2: "/project/poster/bakcell-2.webp",
     appStoreUrl: "",
     playStoreUrl: "",
   },
