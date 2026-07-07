@@ -23,6 +23,12 @@ export type AppProject = {
   team?: boolean;
   /** Small muted note under the app name, e.g. "Bakcell" */
   company?: string;
+  /** true = app is no longer live in production → store badges are
+   *  replaced by a "No longer in production" note. */
+  retired?: boolean;
+  /** Small app logo shown inside the retired note.
+   *  Drop the file into public/project/logo/ and set "/project/logo/<id>.png". */
+  logo?: string;
 };
 
 export type PackageProject = {
@@ -170,6 +176,7 @@ export const apps: AppProject[] = [
     name: "Uup Anonymous",
     team: true,
     company: "Noacco",
+    retired: true,
     poster: "/project/poster/uup-anonymous-1.jpg",
     poster2: "/project/poster/uup-anonymous-2.jpg",
     appStoreUrl: "",

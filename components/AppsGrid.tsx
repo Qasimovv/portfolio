@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
+import { Archive } from "lucide-react";
 import { appSections, type AppProject } from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { fadeUp } from "@/lib/motion";
@@ -10,8 +11,8 @@ import { fadeUp } from "@/lib/motion";
 
 export default function AppsGrid({ apps }: { apps: AppProject[] }) {
   const groups = [
-    { key: "solo", label: appSections.solo, items: apps.filter((a) => !a.team) },
     { key: "team", label: appSections.team, items: apps.filter((a) => a.team) },
+    { key: "solo", label: appSections.solo, items: apps.filter((a) => !a.team) },
   ].filter((group) => group.items.length > 0);
 
   return (
@@ -113,21 +114,41 @@ function AppCard({ app, index }: { app: AppProject; index: number }) {
         </p>
       )}
 
-      {/* Store badges */}
-      <div className="mt-3 flex justify-center gap-2">
-        <StoreBadge
-          href={app.appStoreUrl}
-          src="/logo/app-store.svg"
-          available="Download on App Store"
-          unavailable="Not available on App Store"
-        />
-        <StoreBadge
-          href={app.playStoreUrl}
-          src="/logo/play-store.svg"
-          available="Get it on Google Play"
-          unavailable="Not available on Google Play"
-        />
-      </div>
+      {/* Store badges — or a "retired" note for apps taken out of production */}
+      {app.retired ? (
+        <div className="mt-3 flex justify-center">
+          <span className="inline-flex h-[30px] items-center gap-1.5 rounded-full bg-zinc-100 px-3 text-xs font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+            {app.logo ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={app.logo}
+                alt=""
+                width={16}
+                height={16}
+                className="rounded-[4px]"
+              />
+            ) : (
+              <Archive className="h-3.5 w-3.5" />
+            )}
+            No longer in production
+          </span>
+        </div>
+      ) : (
+        <div className="mt-3 flex justify-center gap-2">
+          <StoreBadge
+            href={app.appStoreUrl}
+            src="/logo/app-store.svg"
+            available="Download on App Store"
+            unavailable="Not available on App Store"
+          />
+          <StoreBadge
+            href={app.playStoreUrl}
+            src="/logo/play-store.svg"
+            available="Get it on Google Play"
+            unavailable="Not available on Google Play"
+          />
+        </div>
+      )}
     </motion.div>
   );
 }

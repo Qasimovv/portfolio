@@ -23,8 +23,11 @@ All content lives in **one file**: [`data/site.ts`](data/site.ts)
 - **socials** — Instagram / X / LinkedIn / YouTube / GitHub (empty string = icon hidden)
 - **apps** — Apps tab: `poster`, `appStoreUrl`, `playStoreUrl` per app
   (empty link = grayed-out "not available" badge). Apps render in two groups:
-  solo work (default) and team/company work (`team: true`, optional `company`
-  note shown under the name). Group headings live in `appSections`.
+  team/company work first (`team: true`, optional `company` note shown under
+  the name), then solo work. Group headings live in `appSections`.
+  Apps that were taken out of production: set `retired: true` — badges are
+  replaced by a "No longer in production" note (optional `logo` shown in it,
+  file under `public/project/logo/`).
 - **packages / other** — masonry cards: name, description, link
 - **contact** — the "let’s work together" card copy (with bold segments)
 - **gallery** — draggable photo marquee (location + subtitle labels)
