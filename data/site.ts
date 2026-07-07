@@ -294,9 +294,11 @@ export const retiredApps: RetiredApp[] = [
   { id: "anipay", name: "AniPay", logo: "/project/logo/anipay.png" },
   { id: "inside", name: "Inside", logo: "/project/logo/inside.png" },
   { id: "suyumaz", name: "Suyumaz", logo: "/project/logo/suyumaz.png" },
+  { id: "staffco", name: "StaffCo", logo: "/project/logo/staffco.png" },
 
   // ---- Own (own: true → shown under "my own apps") ----
   { id: "hesablacom", name: "Hesabla.com", own: true, logo: "/project/logo/hesablacom.png" },
+  { id: "1termin", name: "1Termin", own: true, logo: "/project/logo/1termin.png" },
 ];
 
 // -------------------- Packages tab --------------------
