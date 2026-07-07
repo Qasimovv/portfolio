@@ -1,7 +1,7 @@
 // =============================================================
-//  SITE CONTENT — bütün məzmun buradadır.
-//  Sən sadəcə bu faylı redaktə et: ad, linklər, app-lər, şəkillər.
-//  Kod fayllarına toxunmağa ehtiyac yoxdur.
+//  SITE CONTENT — everything editable lives in this file.
+//  Update names, links, apps and images here; no need to touch
+//  any component code.
 // =============================================================
 
 // -------------------- Types --------------------
@@ -9,11 +9,11 @@
 export type AppProject = {
   id: string;
   name: string;
-  /** Poster şəkli (1:2 nisbət, məs. 400×800). Faylı public/project/poster/
-   *  qovluğuna at və buraya "/project/poster/<id>.png" yaz.
-   *  Boş qalsa gradient placeholder çıxır. */
+  /** Poster image (1:2 ratio, e.g. 400×800). Drop the file into
+   *  public/project/poster/ and set "/project/poster/<id>.png" here.
+   *  Left empty, a gradient placeholder is rendered. */
   poster?: string;
-  /** Boş qalsa badge boz (not available) görünür. */
+  /** Empty = grayed-out "not available" badge. */
   appStoreUrl?: string;
   playStoreUrl?: string;
 };
@@ -33,7 +33,7 @@ export type OtherProject = {
 };
 
 export type GalleryPhoto = {
-  /** public/gallery/ içindəki şəkil — öz fotolarını atıb src-ləri dəyiş */
+  /** Image inside public/gallery/ — drop your own photos and update src */
   src: string;
   location: string;
   subtitle?: string;
@@ -41,25 +41,25 @@ export type GalleryPhoto = {
 
 export type SocialKey = "instagram" | "x" | "linkedin" | "youtube" | "github";
 
-// -------------------- Profil --------------------
+// -------------------- Profile --------------------
 
 export const profile = {
   name: "Elnur Qasimov",
-  /** Hero-dakı böyük başlıq */
+  /** Big hero heading */
   role: "Senior Flutter Developer",
-  /** Mavi əlyazma sətir */
+  /** Blue handwritten line under the heading */
   tagline: "20+ apps across iOS, Android & web",
   available: true,
   location: "Baku, Azerbaijan",
   email: "gasimovelnur2019@gmail.com",
-  /** public/avatar.jpg qoyandan sonra "/avatar.jpg" yaz — boşdursa gradient dairə çıxır */
+  /** After adding public/avatar.jpg set "/avatar.jpg" — empty renders a gradient circle */
   avatar: "",
-  /** public/resume.pdf qoyandan sonra "/resume.pdf" yaz — boşdursa CV sətri gizlənir */
+  /** After adding public/resume.pdf set "/resume.pdf" — empty hides the résumé row */
   resumeUrl: "",
 };
 
-// -------------------- Sosial linklər --------------------
-// Boş buraxdığın gizlənir (həm hero ikonları, həm contact siyahısı).
+// -------------------- Social links --------------------
+// Empty strings are hidden (both hero icons and contact rows).
 
 export const socials: Record<SocialKey, string> = {
   instagram: "",
@@ -69,11 +69,11 @@ export const socials: Record<SocialKey, string> = {
   github: "https://github.com/Qasimovv",
 };
 
-// -------------------- Contact kartı --------------------
+// -------------------- Contact card --------------------
 
 export const contact = {
   heading: "let’s work together",
-  /** bold: true olan hissələr qalın göstərilir */
+  /** Segments with bold: true render emphasized */
   blurb: [
     { text: "I’ve built " },
     { text: "20+ Flutter apps & games", bold: true },
@@ -88,7 +88,7 @@ export const contact = {
 };
 
 // -------------------- Apps tab --------------------
-//  Store linklərini yapışdır — boş qalanlar boz badge ilə görünür.
+//  Paste real store links — empty ones show a grayed-out badge.
 
 export const apps: AppProject[] = [
   { id: "patches", name: "Patches", appStoreUrl: "", playStoreUrl: "" },
@@ -158,9 +158,10 @@ export const other: OtherProject[] = [
   },
 ];
 
-// -------------------- Gallery (foto lenti) --------------------
-//  Öz fotolarını public/gallery/ qovluğuna at və src-ləri dəyiş.
-//  Klik instagram linkinə aparır (socials.instagram boşdursa klik olmur).
+// -------------------- Gallery (photo marquee) --------------------
+//  Drop your own photos into public/gallery/ and update the src fields.
+//  Clicking a photo opens the Instagram link (no link if socials.instagram
+//  is empty).
 
 export const gallery: GalleryPhoto[] = [
   { src: "/gallery/g1.svg", location: "Baku", subtitle: "Azerbaijan" },

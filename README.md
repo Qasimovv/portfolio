@@ -1,63 +1,65 @@
-# Elnur — Portfolio
+# Elnur Qasimov — Portfolio
 
-kamranbekirov.com dizaynı əsasında qurulmuş Flutter developer portfolio saytı
-(eyni layout/davranış, öz kod + öz məzmun).
+Personal Flutter-developer portfolio. Layout and interactions inspired by
+[kamranbekirov.com](https://www.kamranbekirov.com) — rebuilt from scratch with
+my own code, content and assets.
+
 **Next.js 15 (App Router) + Tailwind CSS v4 + TypeScript + Motion + Lenis.**
 
-## İşə salmaq
+## Getting started
 
 ```bash
-cd portfolio
 npm install
 npm run dev      # http://localhost:3000
 ```
 
-Prod build: `npm run build && npm run start`.
+Production build: `npm run build && npm run start`.
 
-## Sən nəyi redaktə edirsən
+## Editing content
 
-Bütün məzmun **bir faylda**: [`data/site.ts`](data/site.ts)
+All content lives in **one file**: [`data/site.ts`](data/site.ts)
 
-- **profile** — ad, rol, tagline, email, avatar, CV linki, "Available for work"
-- **socials** — Instagram / X / LinkedIn / YouTube / GitHub (boş = ikon gizlənir)
-- **apps** — Apps tabı: hər app üçün `poster`, `appStoreUrl`, `playStoreUrl`
-  (link boşdursa badge boz "not available" görünür)
-- **packages / other** — masonry kartlar: ad, təsvir, link
-- **contact** — "let’s work together" kartındakı mətn (bold hissələri ilə)
-- **gallery** — sürüşən foto lenti (location + subtitle etiketləri)
+- **profile** — name, role, tagline, email, avatar, résumé link, "Available for work" flag
+- **socials** — Instagram / X / LinkedIn / YouTube / GitHub (empty string = icon hidden)
+- **apps** — Apps tab: `poster`, `appStoreUrl`, `playStoreUrl` per app
+  (empty link = grayed-out "not available" badge)
+- **packages / other** — masonry cards: name, description, link
+- **contact** — the "let’s work together" card copy (with bold segments)
+- **gallery** — draggable photo marquee (location + subtitle labels)
 
-## Şəkillər (`public/`)
+## Images (`public/`)
 
-| Nə | Hara | Sonra |
+| What | Where | Then |
 |---|---|---|
-| Profil şəkli | `public/avatar.jpg` | `profile.avatar = "/avatar.jpg"` |
-| CV | `public/resume.pdf` | `profile.resumeUrl = "/resume.pdf"` |
-| App posterləri (1:2, məs. 400×800) | `public/project/poster/<id>.png` | `apps[].poster = "/project/poster/<id>.png"` |
-| Gallery fotoları | `public/gallery/*.jpg` | `gallery[].src` dəyiş |
+| Profile photo | `public/avatar.jpg` | set `profile.avatar = "/avatar.jpg"` |
+| Résumé | `public/resume.pdf` | set `profile.resumeUrl = "/resume.pdf"` |
+| App posters (1:2, e.g. 400×800) | `public/project/poster/<id>.png` | set `apps[].poster = "/project/poster/<id>.png"` |
+| Gallery photos | `public/gallery/*.jpg` | update `gallery[].src` |
 
-Şəkil yoxdursa hər yerdə **avtomatik gradient placeholder** göstərilir — sayt yenə tam görünür.
+Anything missing falls back to an **auto-generated gradient placeholder** — the
+site always renders complete.
 
-## Dizayn detalları
+## Design notes
 
-- Açıq/tünd rejim sistemin `prefers-color-scheme`-inə bağlıdır (toggle yoxdur)
-- Fontlar: **Inter Tight** (əsas) + **Kalam** (mavi əlyazma vurğular, `#04AAFB`)
-- Foto lenti: sonsuz, avto-sürüşən, drag + momentum, hover-də düzəlib böyüyür
-- Apps grid: 2/3/5/8 sütun, aşağıya doğru fona ərimə (fade) effekti
-- "Work With Me" və "Available for work" → səhifənin sonuna smooth scroll
+- Light/dark follows the system `prefers-color-scheme` (no toggle)
+- Fonts: **Inter Tight** (body) + **Kalam** (handwritten blue accents, `#04AAFB`)
+- Photo marquee: infinite, auto-drifting, drag with momentum, straightens & scales on hover
+- Apps grid: 2/3/5/8 columns, fades into the page background at the bottom
+- "Work With Me" and the availability pill smooth-scroll to the contact card
 
-## Deploy (Vercel — pulsuz)
+## Deploy (Vercel)
 
-1. Bu qovluğu öz GitHub repo-suna push et
-2. [vercel.com](https://vercel.com) → Import → repo seç → Deploy
-3. Öz domenini Vercel-də bağla
+1. Push this repo to GitHub
+2. [vercel.com](https://vercel.com) → Import → select the repo → Deploy
+3. Attach a custom domain in Project → Settings → Domains
 
-## Struktur
+## Structure
 
 ```
 app/               layout, page, globals.css, icon.svg
 components/        Header, Gallery, ProjectTabs, AppsGrid, MasonryGrid,
                    Contact, AvailabilityPill, SmoothScroll
-data/site.ts       ← BÜTÜN MƏZMUN burada
+data/site.ts       ← ALL CONTENT lives here
 lib/               gradient.ts, motion.ts, scroll.ts
 public/            logo/ (store badges), gallery/, project/poster/
 ```
