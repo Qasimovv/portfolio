@@ -70,27 +70,27 @@ function AppCard({ app, index }: { app: AppProject; index: number }) {
       {wide ? (
         <div className="mb-4 grid grid-cols-2 gap-2">
           {posters.map((poster) => (
-            <div key={poster} className="overflow-hidden rounded-2xl">
+            <div key={poster} className="aspect-[1/2] overflow-hidden rounded-2xl">
               <Image
                 src={poster}
                 alt={app.name}
                 width={400}
                 height={800}
                 loading="lazy"
-                className="h-auto w-full"
+                className="h-full w-full object-cover"
               />
             </div>
           ))}
         </div>
       ) : posters.length === 1 ? (
-        <div className="mb-4 overflow-hidden rounded-[23.75px]">
+        <div className="mb-4 aspect-[1/2] overflow-hidden rounded-[23.75px]">
           <Image
             src={posters[0]}
             alt={app.name}
             width={400}
             height={800}
             loading="lazy"
-            className="h-auto w-full"
+            className="h-full w-full object-cover"
           />
         </div>
       ) : (
