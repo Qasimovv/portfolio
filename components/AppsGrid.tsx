@@ -3,7 +3,12 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Archive } from "lucide-react";
-import { appSections, retiredApps, type AppProject } from "@/data/site";
+import {
+  appSections,
+  retiredApps,
+  type AppProject,
+  type RetiredApp,
+} from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { fadeUp } from "@/lib/motion";
 
@@ -18,12 +23,15 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
   return (
     <div className="relative space-y-12">
       {groups.map((group) => {
-        // When every card is double-width, use even column counts so
+        // Groups containing double-width cards use even column counts so
         // col-span-2 cards tile without leftover columns.
-        const allWide = group.items.every((a) => a.poster && a.poster2);
-        const gridClass = allWide
+        const hasWide = group.items.some((a) => a.poster && a.poster2);
+        const gridClass = hasWide
           ? "grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6 2xl:grid-cols-8"
           : "grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8";
+        const chips = retiredApps.filter((a) =>
+          group.key === "team" ? !a.own : a.own,
+        );
         return (
           <section key={group.key}>
             {groups.length > 1 && <GroupLabel text={group.label} />}
@@ -32,9 +40,7 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
                 <AppCard key={app.id} app={app} index={i} />
               ))}
             </div>
-            {group.key === "team" && retiredApps.length > 0 && (
-              <RetiredAppChips />
-            )}
+            {chips.length > 0 && <RetiredAppChips items={chips} />}
           </section>
         );
       })}
@@ -47,22 +53,22 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
 
 // -------------------- Retired apps (logo chips) --------------------
 
-function RetiredAppChips() {
+function RetiredAppChips({ items }: { items: RetiredApp[] }) {
   return (
     <div className="mt-10">
       <GroupLabel text={appSections.retired} />
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {retiredApps.map((app, i) => (
+      <div className="flex flex-wrap items-center justify-center gap-2.5">
+        {items.map((app, i) => (
           <motion.span
             key={app.id}
             {...fadeUp(i, 6)}
-            className="inline-flex items-center gap-2 rounded-full bg-white py-1.5 pl-2 pr-3.5 dark:bg-zinc-900"
+            className="inline-flex items-center gap-2.5 rounded-full bg-white py-2 pl-2.5 pr-4 dark:bg-zinc-900"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={app.logo}
               alt={app.name}
-              className="h-5 w-auto max-w-10 rounded-md"
+              className="h-8 w-auto max-w-16 rounded-lg"
             />
             <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
               {app.name}

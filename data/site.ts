@@ -52,6 +52,8 @@ export type RetiredApp = {
   company?: string;
   /** Logo file under public/project/logo/ (any ratio — height is normalized) */
   logo: string;
+  /** true = shown under "my own apps" instead of the team group */
+  own?: boolean;
 };
 
 export type GalleryPhoto = {
@@ -123,12 +125,88 @@ export const appSections = {
 
 export const apps: AppProject[] = [
   // ---- Built solo ----
-  { id: "patches", name: "Patches", appStoreUrl: "", playStoreUrl: "" },
-  { id: "mergio", name: "Mergio: 2048 Block Blast", appStoreUrl: "", playStoreUrl: "" },
-  { id: "wend", name: "Wend", appStoreUrl: "", playStoreUrl: "" },
-  { id: "tango", name: "Tango", appStoreUrl: "", playStoreUrl: "" },
+  {
+    id: "patches",
+    name: "Patches",
+    poster: "/project/poster/patches-1.jpg",
+    poster2: "/project/poster/patches-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "mergio",
+    name: "Mergio: 2048 Block Blast",
+    poster: "/project/poster/mergio-1.jpg",
+    poster2: "/project/poster/mergio-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "wend",
+    name: "Wend",
+    poster: "/project/poster/wend-1.jpg",
+    poster2: "/project/poster/wend-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "tango",
+    name: "Tango",
+    poster: "/project/poster/tango-1.jpg",
+    poster2: "/project/poster/tango-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "admobpulse",
+    name: "AdMob Pulse",
+    poster: "/project/poster/admobpulse-1.jpg",
+    poster2: "/project/poster/admobpulse-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "habitiz",
+    name: "Habitiz",
+    poster: "/project/poster/habitiz-1.jpg",
+    poster2: "/project/poster/habitiz-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "turboscanner",
+    name: "TurboScanner",
+    poster: "/project/poster/turboscanner-1.jpg",
+    poster2: "/project/poster/turboscanner-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "wearme",
+    name: "WearMe",
+    poster: "/project/poster/wearme-1.jpg",
+    poster2: "/project/poster/wearme-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "whichone-ai",
+    name: "WhichOne AI",
+    poster: "/project/poster/whichone-ai-1.jpg",
+    poster2: "/project/poster/whichone-ai-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "zip",
+    name: "Zip",
+    poster: "/project/poster/zip-1.jpg",
+    poster2: "/project/poster/zip-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  // poster-less cards last so the grid tiles cleanly
   { id: "recur", name: "Recur", appStoreUrl: "", playStoreUrl: "" },
-  { id: "admobpulse", name: "AdMob Pulse", appStoreUrl: "", playStoreUrl: "" },
   { id: "infopulse", name: "InfoPulse AI", appStoreUrl: "", playStoreUrl: "" },
 
   // ---- Built with teams / companies (team: true) ----
@@ -183,6 +261,17 @@ export const apps: AppProject[] = [
     playStoreUrl: "",
   },
   {
+    id: "buylink",
+    name: "BuyLink",
+    team: true,
+    retired: true,
+    logo: "/project/logo/buylink.png",
+    poster: "/project/poster/buylink-1.jpg",
+    poster2: "/project/poster/buylink-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
     id: "uup-anonymous",
     name: "Uup Anonymous",
     team: true,
@@ -201,10 +290,13 @@ export const apps: AppProject[] = [
 //  public/project/logo/ and add one line here.
 
 export const retiredApps: RetiredApp[] = [
+  // ---- Team / company (default) ----
   { id: "anipay", name: "AniPay", logo: "/project/logo/anipay.png" },
-  { id: "buylink", name: "BuyLink", logo: "/project/logo/buylink.png" },
   { id: "inside", name: "Inside", logo: "/project/logo/inside.png" },
   { id: "suyumaz", name: "Suyumaz", logo: "/project/logo/suyumaz.png" },
+
+  // ---- Own (own: true → shown under "my own apps") ----
+  { id: "hesablacom", name: "Hesabla.com", own: true, logo: "/project/logo/hesablacom.png" },
 ];
 
 // -------------------- Packages tab --------------------
