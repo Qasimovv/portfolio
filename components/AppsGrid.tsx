@@ -44,9 +44,6 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
           </section>
         );
       })}
-
-      {/* Bottom fade into the page background */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-zinc-50 dark:to-zinc-950" />
     </div>
   );
 }
@@ -62,7 +59,7 @@ function RetiredAppChips({ items }: { items: RetiredApp[] }) {
           <motion.span
             key={app.id}
             {...fadeUp(i, 6)}
-            className="inline-flex items-center gap-2.5 rounded-full bg-white py-2 pl-2.5 pr-4 dark:bg-zinc-900"
+            className="inline-flex items-center gap-2.5 rounded-full bg-white py-2 pl-2.5 pr-4 shadow-sm ring-1 ring-zinc-200/60 dark:bg-zinc-900 dark:ring-zinc-700/60"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -70,7 +67,7 @@ function RetiredAppChips({ items }: { items: RetiredApp[] }) {
               alt={app.name}
               className="h-8 w-auto max-w-16 rounded-lg"
             />
-            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+            <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">
               {app.name}
             </span>
             {app.company && (
