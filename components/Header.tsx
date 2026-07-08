@@ -2,44 +2,10 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import {
-  Github,
-  Instagram,
-  Linkedin,
-  Twitter,
-  Youtube,
-  type LucideIcon,
-} from "lucide-react";
-import { profile, socials, type SocialKey } from "@/data/site";
+import { profile } from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { scrollToContact } from "@/lib/scroll";
 import { EASE } from "@/lib/motion";
-
-// -------------------- Socials config --------------------
-
-const SOCIAL_ORDER: SocialKey[] = [
-  "instagram",
-  "x",
-  "linkedin",
-  "youtube",
-  "github",
-];
-
-const SOCIAL_ICONS: Record<SocialKey, LucideIcon> = {
-  instagram: Instagram,
-  x: Twitter,
-  linkedin: Linkedin,
-  youtube: Youtube,
-  github: Github,
-};
-
-const SOCIAL_HOVER_COLORS: Record<SocialKey, string> = {
-  instagram: "#E4405F",
-  x: "#1DA1F2",
-  linkedin: "#0A66C2",
-  youtube: "#FF0000",
-  github: "#333333",
-};
 
 // -------------------- Hero header --------------------
 
@@ -109,29 +75,6 @@ export default function Header() {
         </motion.button>
       </motion.div>
 
-      {/* Social icons */}
-      <motion.div
-        className="mt-6 flex items-center gap-3"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.45, ease: EASE }}
-      >
-        {SOCIAL_ORDER.filter((key) => socials[key]).map((key) => {
-          const Icon = SOCIAL_ICONS[key];
-          return (
-            <a
-              key={key}
-              href={socials[key]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex h-10 w-10 items-center justify-center rounded-full"
-              style={{ "--hover-color": SOCIAL_HOVER_COLORS[key] } as React.CSSProperties}
-            >
-              <Icon className="h-[18px] w-[18px] text-zinc-400 transition-colors duration-300 group-hover:text-[var(--hover-color)]" />
-            </a>
-          );
-        })}
-      </motion.div>
     </header>
   );
 }
