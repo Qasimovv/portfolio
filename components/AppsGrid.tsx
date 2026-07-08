@@ -3,12 +3,7 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Archive } from "lucide-react";
-import {
-  appSections,
-  retiredApps,
-  type AppProject,
-  type RetiredApp,
-} from "@/data/site";
+import { appSections, retiredApps, type AppProject } from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { fadeUp } from "@/lib/motion";
 
@@ -29,9 +24,6 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
         const gridClass = hasWide
           ? "grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6 2xl:grid-cols-8"
           : "grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8";
-        const chips = retiredApps.filter((a) =>
-          group.key === "team" ? !a.own : a.own,
-        );
         return (
           <section key={group.key}>
             {groups.length > 1 && <GroupLabel text={group.label} />}
@@ -40,25 +32,26 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
                 <AppCard key={app.id} app={app} index={i} />
               ))}
             </div>
-            {chips.length > 0 && <RetiredAppChips items={chips} />}
           </section>
         );
       })}
+
+      {/* Retired apps — one chip row at the very bottom */}
+      {retiredApps.length > 0 && <RetiredAppChips />}
     </div>
   );
 }
 
 // -------------------- Retired apps (logo chips) --------------------
 
-function RetiredAppChips({ items }: { items: RetiredApp[] }) {
+function RetiredAppChips() {
   return (
-    <div className="mt-10">
+    <div>
       <GroupLabel text={appSections.retired} />
       <div className="flex flex-wrap items-center justify-center gap-2.5">
-        {items.map((app, i) => (
-          <motion.span
+        {retiredApps.map((app) => (
+          <span
             key={app.id}
-            {...fadeUp(i, 6)}
             className="inline-flex items-center gap-2.5 rounded-full bg-white py-2 pl-2.5 pr-4 shadow-sm ring-1 ring-zinc-200/60 dark:bg-zinc-900 dark:ring-zinc-700/60"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -75,7 +68,7 @@ function RetiredAppChips({ items }: { items: RetiredApp[] }) {
                 {app.company}
               </span>
             )}
-          </motion.span>
+          </span>
         ))}
       </div>
     </div>

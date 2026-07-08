@@ -52,8 +52,6 @@ export type RetiredApp = {
   company?: string;
   /** Logo file under public/project/logo/ (any ratio — height is normalized) */
   logo: string;
-  /** true = shown under "my own apps" instead of the team group */
-  own?: boolean;
 };
 
 export type GalleryPhoto = {
@@ -72,7 +70,7 @@ export const profile = {
   /** Big hero heading */
   role: "Senior Mobile Engineer",
   /** Blue handwritten line under the heading */
-  tagline: "20+ apps across iOS, Android & web",
+  tagline: "40+ apps across iOS, Android & web",
   available: true,
   location: "Baku, Azerbaijan",
   email: "elnurgasimovv@gmail.com",
@@ -100,7 +98,7 @@ export const contact = {
   /** Segments with bold: true render emphasized */
   blurb: [
     { text: "I’ve built " },
-    { text: "20+ apps & games", bold: true },
+    { text: "40+ apps & games", bold: true },
     { text: " across iOS and Android, backed by " },
     { text: "shared packages", bold: true },
     { text: " and a " },
@@ -205,9 +203,6 @@ export const apps: AppProject[] = [
     appStoreUrl: "",
     playStoreUrl: "",
   },
-  // poster-less cards last so the grid tiles cleanly
-  { id: "recur", name: "Recur", appStoreUrl: "", playStoreUrl: "" },
-  { id: "infopulse", name: "InfoPulse AI", appStoreUrl: "", playStoreUrl: "" },
 
   // ---- Built with teams / companies (team: true) ----
   {
@@ -285,20 +280,17 @@ export const apps: AppProject[] = [
 ];
 
 // -------------------- Retired apps (logo chips) --------------------
-//  Apps that were taken out of production — shown as small logo+name
-//  chips under the team group. Scales to any count: drop the logo into
-//  public/project/logo/ and add one line here.
+//  Apps that were taken out of production — shown as one logo+name chip
+//  row at the very bottom of the Apps tab. Scales to any count: drop the
+//  logo into public/project/logo/ and add one line here.
 
 export const retiredApps: RetiredApp[] = [
-  // ---- Team / company (default) ----
   { id: "anipay", name: "AniPay", logo: "/project/logo/anipay.png" },
   { id: "inside", name: "Inside", logo: "/project/logo/inside.png" },
   { id: "suyumaz", name: "Suyumaz", logo: "/project/logo/suyumaz.png" },
   { id: "staffco", name: "StaffCo", logo: "/project/logo/staffco.png" },
-
-  // ---- Own (own: true → shown under "my own apps") ----
-  { id: "hesablacom", name: "Hesabla.com", own: true, logo: "/project/logo/hesablacom.png" },
-  { id: "1termin", name: "1Termin", own: true, logo: "/project/logo/1termin.png" },
+  { id: "hesablacom", name: "Hesabla.com", logo: "/project/logo/hesablacom.png" },
+  { id: "1termin", name: "1Termin", logo: "/project/logo/1termin.png" },
 ];
 
 // -------------------- Packages tab --------------------
