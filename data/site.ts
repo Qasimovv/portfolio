@@ -71,7 +71,7 @@ export const profile = {
   /** Big hero heading */
   role: "Senior Mobile Engineer",
   /** Blue handwritten line under the heading */
-  tagline: "40+ apps across iOS, Android & web",
+  tagline: "30+ apps across iOS, Android & web",
   available: true,
   location: "Baku, Azerbaijan",
   email: "elnurgasimovv@gmail.com",
@@ -99,7 +99,7 @@ export const contact = {
   /** Segments with bold: true render emphasized */
   blurb: [
     { text: "I’ve built " },
-    { text: "40+ apps & games", bold: true },
+    { text: "30+ apps & games", bold: true },
     { text: " across iOS and Android, backed by " },
     { text: "shared packages", bold: true },
     { text: " and a " },
@@ -298,6 +298,9 @@ export const retiredApps: RetiredApp[] = [
   { id: "cibim", name: "Cibim" },
   { id: "infopulse", name: "InfoPulse AI" },
   { id: "recur", name: "Recur" },
+  { id: "endirim", name: "Endirim" },
+  { id: "willaz", name: "Will.az" },
+  { id: "neural-id", name: "Neural ID" },
 ];
 
 // -------------------- Packages tab --------------------

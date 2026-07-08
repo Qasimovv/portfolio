@@ -33,13 +33,10 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
           <section key={group.key}>
             {groups.length > 1 && <GroupLabel text={group.label} />}
             {group.key === "team" ? (
-              // Fixed row layout (teamRows), incomplete rows centered
+              // Fixed row layout (teamRows), rows start from the left
               <div className="space-y-3">
                 {chunkBySizes(group.items, teamRows).map((row, ri) => (
-                  <div
-                    key={ri}
-                    className="flex flex-wrap justify-center gap-3"
-                  >
+                  <div key={ri} className="flex flex-wrap gap-3">
                     {row.map((app, i) => (
                       <div
                         key={app.id}
@@ -216,18 +213,20 @@ function AppCard({ app, index }: { app: AppProject; index: number }) {
         </div>
       ) : (
         <div className="mt-3 flex justify-center gap-2">
-          <StoreBadge
-            href={app.appStoreUrl}
-            src="/logo/app-store.svg"
-            available="Download on App Store"
-            unavailable="Not available on App Store"
-          />
-          <StoreBadge
-            href={app.playStoreUrl}
-            src="/logo/play-store.svg"
-            available="Get it on Google Play"
-            unavailable="Not available on Google Play"
-          />
+          {app.appStoreUrl && (
+            <StoreBadge
+              href={app.appStoreUrl}
+              src="/logo/app-store.svg"
+              label="Download on App Store"
+            />
+          )}
+          {app.playStoreUrl && (
+            <StoreBadge
+              href={app.playStoreUrl}
+              src="/logo/play-store.svg"
+              label="Get it on Google Play"
+            />
+          )}
         </div>
       )}
     </motion.div>
@@ -239,31 +238,21 @@ function AppCard({ app, index }: { app: AppProject; index: number }) {
 function StoreBadge({
   href,
   src,
-  available,
-  unavailable,
+  label,
 }: {
-  href?: string;
+  href: string;
   src: string;
-  available: string;
-  unavailable: string;
+  label: string;
 }) {
-  /* eslint-disable @next/next/no-img-element */
-  if (href) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="transition-opacity hover:opacity-80"
-      >
-        <img src={src} alt={available} width={88} height={30} />
-      </a>
-    );
-  }
   return (
-    <span className="cursor-not-allowed opacity-30 grayscale">
-      <img src={src} alt={unavailable} width={88} height={30} />
-    </span>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="transition-opacity hover:opacity-80"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={label} width={88} height={30} />
+    </a>
   );
-  /* eslint-enable @next/next/no-img-element */
 }
