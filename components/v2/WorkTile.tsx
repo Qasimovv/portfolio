@@ -3,72 +3,93 @@ import { ArrowUpRight } from "lucide-react";
 import type { AppProject } from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 
-// -------------------- Work poster tile (v2) --------------------
-//  Poster-forward card; store links + name reveal on hover.
+// -------------------- Work card (v2) --------------------
+//  Two-poster card (falls back to one / gradient). Uniform size in any
+//  grid column, so a 3-card row matches a 4-card row and the extra
+//  space stays empty on the right.
 
 export default function WorkTile({ app }: { app: AppProject }) {
-  const poster = app.poster ?? app.poster2;
+  const posters = [app.poster, app.poster2].filter(Boolean) as string[];
   const stores: { label: string; href: string }[] = [];
   if (app.appStoreUrl) stores.push({ label: "App Store", href: app.appStoreUrl });
   if (app.playStoreUrl) stores.push({ label: "Google Play", href: app.playStoreUrl });
 
   return (
-    <div className="group relative aspect-[4/5] overflow-hidden rounded-3xl ring-1 ring-zinc-200/70 dark:ring-white/10">
-      {/* Poster (or gradient placeholder) */}
-      {poster ? (
-        <Image
-          src={poster}
-          alt={app.name}
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 300px"
-          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
-        />
+    <div className="flex flex-col rounded-3xl bg-white p-4 ring-1 ring-zinc-200/70 dark:bg-white/[0.04] dark:ring-white/10">
+      {/* Posters */}
+      {posters.length >= 2 ? (
+        <div className="grid grid-cols-2 gap-2">
+          {posters.slice(0, 2).map((p) => (
+            <div key={p} className="aspect-[1/2] overflow-hidden rounded-2xl">
+              <Image
+                src={p}
+                alt={app.name}
+                width={400}
+                height={800}
+                loading="lazy"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+          ))}
+        </div>
+      ) : posters.length === 1 ? (
+        <div className="aspect-[1/1] overflow-hidden rounded-2xl">
+          <Image
+            src={posters[0]}
+            alt={app.name}
+            width={400}
+            height={800}
+            loading="lazy"
+            className="h-full w-full object-cover object-top"
+          />
+        </div>
       ) : (
         <div
-          className="flex h-full w-full items-center justify-center"
+          className="flex aspect-[1/1] items-center justify-center rounded-2xl"
           style={{ background: gradientFor(app.id) }}
         >
-          <span className="text-5xl font-bold text-white/90">
+          <span className="text-4xl font-bold text-white/90">
             {app.name.charAt(0)}
           </span>
         </div>
       )}
 
-      {/* Retired badge */}
-      {app.retired && (
-        <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white/90 backdrop-blur-sm">
-          Retired
-        </span>
+      {/* Name + retired badge */}
+      <div className="mt-3 flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            {app.name}
+          </h3>
+          {app.company && (
+            <p className="truncate text-xs text-zinc-400 dark:text-zinc-500">
+              {app.company}
+            </p>
+          )}
+        </div>
+        {app.retired && (
+          <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-zinc-500 dark:bg-white/10 dark:text-zinc-400">
+            Retired
+          </span>
+        )}
+      </div>
+
+      {/* Store links (only where the app is actually published) */}
+      {stores.length > 0 && (
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          {stores.map((s) => (
+            <a
+              key={s.href}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2.5 py-1 text-[11px] font-medium text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-white/10 dark:text-zinc-300 dark:hover:bg-white/20"
+            >
+              {s.label}
+              <ArrowUpRight className="h-3 w-3" />
+            </a>
+          ))}
+        </div>
       )}
-
-      {/* Hover overlay: name + company + store links */}
-      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/85 via-black/25 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <h3 className="text-base font-semibold text-white">{app.name}</h3>
-        {app.company && (
-          <p className="text-xs text-white/60">{app.company}</p>
-        )}
-        {stores.length > 0 && (
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {stores.map((s) => (
-              <a
-                key={s.href}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-md transition-colors hover:bg-white/25"
-              >
-                {s.label}
-                <ArrowUpRight className="h-3 w-3" />
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Always-visible name strip when there is no hover (touch) — subtle */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3 transition-opacity duration-300 group-hover:opacity-0 md:opacity-100">
-        <span className="text-sm font-semibold text-white">{app.name}</span>
-      </div>
     </div>
   );
 }

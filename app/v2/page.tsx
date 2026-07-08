@@ -75,30 +75,39 @@ export default function V2Page() {
             <CopyEmail className="inline-flex w-fit items-center gap-2 rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white" />
           </div>
 
-          {/* Avatar */}
-          <div className="v2-rise relative overflow-hidden rounded-3xl ring-1 ring-zinc-200/70 dark:ring-white/10 lg:col-span-2 lg:row-span-2 [animation-delay:60ms]">
-            {profile.avatar ? (
-              <Image
-                src={profile.avatar}
-                alt={profile.name}
-                fill
-                sizes="(max-width: 1024px) 100vw, 520px"
-                className="object-cover"
-                priority
-              />
-            ) : (
-              <div
-                className="flex h-full min-h-56 w-full items-center justify-center"
-                style={{ background: gradientFor(profile.name) }}
-              >
-                <span className="text-6xl font-bold text-white/90">
-                  {profile.name.charAt(0)}
-                </span>
-              </div>
-            )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center gap-1.5 bg-gradient-to-t from-black/70 to-transparent p-4 text-sm text-white">
-              <MapPin className="h-4 w-4" />
-              {profile.location}
+          {/* Avatar (circular) */}
+          <div
+            className={`${TILE} v2-rise flex flex-col items-center justify-center gap-4 text-center lg:col-span-2 lg:row-span-2 [animation-delay:60ms]`}
+          >
+            <div className="relative h-40 w-40 overflow-hidden rounded-full ring-1 ring-zinc-200 dark:ring-white/15">
+              {profile.avatar ? (
+                <Image
+                  src={profile.avatar}
+                  alt={profile.name}
+                  fill
+                  sizes="160px"
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div
+                  className="flex h-full w-full items-center justify-center"
+                  style={{ background: gradientFor(profile.name) }}
+                >
+                  <span className="text-5xl font-bold text-white/90">
+                    {profile.name.charAt(0)}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="font-[family-name:var(--font-serif-display)] text-2xl leading-none">
+                {profile.name}
+              </p>
+              <p className="mt-1.5 flex items-center justify-center gap-1 text-sm text-zinc-500 dark:text-zinc-400">
+                <MapPin className="h-4 w-4" />
+                {profile.location}
+              </p>
             </div>
           </div>
 
@@ -149,7 +158,7 @@ export default function V2Page() {
         {/* ===================== Selected work ===================== */}
         <section className="mt-20">
           <SectionHeading kicker="01 — Selected work" title="Apps I built solo" />
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {solo.map((app) => (
               <WorkTile key={app.id} app={app} />
             ))}
@@ -166,7 +175,7 @@ export default function V2Page() {
             Production apps built inside product teams at Bakcell, CityNet,
             Rabitabank, Azerconnect and Noacco.
           </p>
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {team.map((app) => (
               <WorkTile key={app.id} app={app} />
             ))}
