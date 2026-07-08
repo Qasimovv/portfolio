@@ -122,6 +122,10 @@ export const appSections = {
   retired: "no longer in production",
 };
 
+/** Row layout of the team group on desktop: cards per row, top to bottom.
+ *  Apps are taken from the team list in order. Incomplete rows are centered. */
+export const teamRows = [3, 2, 2];
+
 export const apps: AppProject[] = [
   // ---- Built solo ----
   {

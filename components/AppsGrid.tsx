@@ -3,7 +3,12 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Archive } from "lucide-react";
-import { appSections, retiredApps, type AppProject } from "@/data/site";
+import {
+  appSections,
+  retiredApps,
+  teamRows,
+  type AppProject,
+} from "@/data/site";
 import { gradientFor } from "@/lib/gradient";
 import { fadeUp } from "@/lib/motion";
 
@@ -27,11 +32,32 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
         return (
           <section key={group.key}>
             {groups.length > 1 && <GroupLabel text={group.label} />}
-            <div className={gridClass}>
-              {group.items.map((app, i) => (
-                <AppCard key={app.id} app={app} index={i} />
-              ))}
-            </div>
+            {group.key === "team" ? (
+              // Fixed row layout (teamRows), incomplete rows centered
+              <div className="space-y-3">
+                {chunkBySizes(group.items, teamRows).map((row, ri) => (
+                  <div
+                    key={ri}
+                    className="flex flex-wrap justify-center gap-3"
+                  >
+                    {row.map((app, i) => (
+                      <div
+                        key={app.id}
+                        className="w-full md:w-[calc((100%-0.75rem)/2)] lg:w-[calc((100%-1.5rem)/3)]"
+                      >
+                        <AppCard app={app} index={i} />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className={gridClass}>
+                {group.items.map((app, i) => (
+                  <AppCard key={app.id} app={app} index={i} />
+                ))}
+              </div>
+            )}
           </section>
         );
       })}
@@ -40,6 +66,24 @@ export default function AppsGrid({ apps }: { apps: AppProject[] }) {
       {retiredApps.length > 0 && <RetiredAppChips />}
     </div>
   );
+}
+
+// -------------------- Helpers --------------------
+
+/** Splits items into rows by the given sizes; leftovers go into rows of 3. */
+function chunkBySizes<T>(items: T[], sizes: number[]): T[][] {
+  const rows: T[][] = [];
+  let index = 0;
+  for (const size of sizes) {
+    if (index >= items.length) break;
+    rows.push(items.slice(index, index + size));
+    index += size;
+  }
+  while (index < items.length) {
+    rows.push(items.slice(index, index + 3));
+    index += 3;
+  }
+  return rows;
 }
 
 // -------------------- Retired apps (logo chips) --------------------
