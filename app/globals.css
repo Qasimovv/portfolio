@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Class-based dark mode — driven by a `.dark` class on <html>, set by the
+   theme toggle (falls back to the system preference on first visit). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* -------------------- Fonts -------------------- */
 
 .font-hand {
