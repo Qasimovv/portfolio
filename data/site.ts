@@ -50,8 +50,9 @@ export type RetiredApp = {
   name: string;
   /** Optional muted note after the name, e.g. "Azerconnect" */
   company?: string;
-  /** Logo file under public/project/logo/ (any ratio — height is normalized) */
-  logo: string;
+  /** Optional logo under public/project/logo/ (any ratio — height is
+   *  normalized). Omit it for a text-only chip. */
+  logo?: string;
 };
 
 export type GalleryPhoto = {
@@ -287,10 +288,13 @@ export const apps: AppProject[] = [
 export const retiredApps: RetiredApp[] = [
   { id: "anipay", name: "AniPay", logo: "/project/logo/anipay.png" },
   { id: "inside", name: "Inside", logo: "/project/logo/inside.png" },
-  { id: "suyumaz", name: "Suyumaz", logo: "/project/logo/suyumaz.png" },
+  { id: "suyumaz", name: "Suyumaz" },
   { id: "staffco", name: "StaffCo", logo: "/project/logo/staffco.png" },
   { id: "hesablacom", name: "Hesabla.com", logo: "/project/logo/hesablacom.png" },
-  { id: "1termin", name: "1Termin", logo: "/project/logo/1termin.png" },
+  { id: "1termin", name: "1Termin" },
+  { id: "cibim", name: "Cibim" },
+  { id: "infopulse", name: "InfoPulse AI" },
+  { id: "recur", name: "Recur" },
 ];
 
 // -------------------- Packages tab --------------------

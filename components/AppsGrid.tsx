@@ -52,14 +52,18 @@ function RetiredAppChips() {
         {retiredApps.map((app) => (
           <span
             key={app.id}
-            className="inline-flex items-center gap-2.5 rounded-full bg-white py-2 pl-2.5 pr-4 shadow-sm ring-1 ring-zinc-200/60 dark:bg-zinc-900 dark:ring-zinc-700/60"
+            className={`inline-flex items-center gap-2.5 rounded-full bg-white py-2 pr-4 shadow-sm ring-1 ring-zinc-200/60 dark:bg-zinc-900 dark:ring-zinc-700/60 ${
+              app.logo ? "pl-2.5" : "pl-4"
+            }`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={app.logo}
-              alt={app.name}
-              className="h-8 w-auto max-w-16 rounded-lg"
-            />
+            {app.logo && (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={app.logo}
+                alt={app.name}
+                className="h-8 w-auto max-w-16 rounded-lg"
+              />
+            )}
             <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">
               {app.name}
             </span>
