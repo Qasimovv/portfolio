@@ -63,14 +63,14 @@ export default function Header() {
           <Image
             src={profile.avatar}
             alt={profile.name}
-            width={104}
-            height={104}
+            width={156}
+            height={156}
             className="rounded-full"
             priority
           />
         ) : (
           <div
-            className="flex h-26 w-26 items-center justify-center rounded-full text-3xl font-bold text-white"
+            className="flex h-39 w-39 items-center justify-center rounded-full text-4xl font-bold text-white"
             style={{ background: gradientFor(profile.name) }}
           >
             {profile.name.charAt(0)}
