@@ -356,17 +356,10 @@ export const other: OtherProject[] = [
 ];
 
 // -------------------- Gallery (photo marquee) --------------------
-//  Drop your own photos into public/gallery/ and update the src fields.
+//  Empty list = the whole photo marquee section is hidden.
+//  To bring it back: drop photos into public/gallery/ and add entries:
+//  { src: "/gallery/vienna.jpg", location: "Vienna", subtitle: "Austria" },
 //  Clicking a photo opens the Instagram link (no link if socials.instagram
 //  is empty).
 
-export const gallery: GalleryPhoto[] = [
-  { src: "/gallery/g1.svg", location: "Baku", subtitle: "Azerbaijan" },
-  { src: "/gallery/g2.svg", location: "Old City", subtitle: "İçərişəhər" },
-  { src: "/gallery/g3.svg", location: "Shahdag", subtitle: "Winter trip" },
-  { src: "/gallery/g4.svg", location: "Gabala", subtitle: "Azerbaijan" },
-  { src: "/gallery/g5.svg", location: "Sheki", subtitle: "Azerbaijan" },
-  { src: "/gallery/g6.svg", location: "Caspian Sea", subtitle: "Sunset" },
-  { src: "/gallery/g7.svg", location: "Quba", subtitle: "Azerbaijan" },
-  { src: "/gallery/g8.svg", location: "Ganja", subtitle: "Azerbaijan" },
-];
+export const gallery: GalleryPhoto[] = [];
