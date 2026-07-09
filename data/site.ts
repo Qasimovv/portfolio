@@ -208,6 +208,24 @@ export const apps: AppProject[] = [
     appStoreUrl: "https://apps.apple.com/us/app/zip-path-logic-puzzle/id6771046628",
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.ols.zip",
   },
+  {
+    id: "simsim",
+    name: "Sim-Sim: eSIM Travel Internet",
+    retired: true,
+    poster: "/project/poster/simsim-1.jpg",
+    poster2: "/project/poster/simsim-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
+  {
+    id: "veylo",
+    name: "Veylo: Fast & Secure VPN Proxy",
+    retired: true,
+    poster: "/project/poster/veylo-1.jpg",
+    poster2: "/project/poster/veylo-2.jpg",
+    appStoreUrl: "",
+    playStoreUrl: "",
+  },
 
   // ---- Built with teams / companies (team: true) ----
   {
