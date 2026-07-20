@@ -119,13 +119,24 @@ export async function parseQuiz(
     return [];
   };
 
+  // PDF text extraction sprinkles spurious spaces inside words
+  // ("Qu estion 18", "Corre ct Answer"). Collapse those spaces within the two
+  // keywords we key on, so detection is space-tolerant.
+  const normalize = (text: string): string =>
+    text
+      .replace(/Q\s*u\s*e\s*s\s*t\s*i\s*o\s*n/gi, "Question")
+      .replace(/C\s*o\s*r\s*r\s*e\s*c\s*t\s*A\s*n\s*s\s*w\s*e\s*r/gi, "Correct Answer");
+
   lines.forEach((ln, idx) => {
-    const qm = ln.text.match(/^Question\s+(\d{1,4})\b/i);
+    const norm = normalize(ln.text);
+    // Header lines are standalone "Question N" (allow a leading ✓ and a tiny
+    // trailing bit like a period), so the number can't be a mid-sentence match.
+    const qm = norm.match(/^(?:✓\s*)?Question\s+(\d{1,4})\b(.{0,3})$/i);
     if (qm) {
       qMarkers.push({ idx, page: ln.page, y: ln.y, num: +qm[1] });
       return;
     }
-    const am = ln.text.match(/Correct Answers?\s*:?\s*(.*)$/i);
+    const am = norm.match(/Correct Answers?\s*:?\s*(.*)$/i);
     if (am) {
       aMarkers.push({ idx, page: ln.page, y: ln.y, letters: extractLetters(am[1]) });
     }
