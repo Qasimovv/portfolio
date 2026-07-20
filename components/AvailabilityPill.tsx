@@ -1,10 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { scrollToContact } from "@/lib/scroll";
 
 // -------------------- "Available for work" pill --------------------
 
 export default function AvailabilityPill() {
+  const pathname = usePathname();
+  // Hidden on utility pages like the quiz trainer
+  if (pathname?.startsWith("/quiz")) return null;
   return (
     <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2">
       <button
