@@ -87,6 +87,7 @@ export default function QuizApp() {
   const [qImages, setQImages] = useState<string[]>([]);
   const [expImages, setExpImages] = useState<string[]>([]);
   const [dragOver, setDragOver] = useState(false);
+  const [jumpValue, setJumpValue] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -381,6 +382,15 @@ export default function QuizApp() {
   const goPrev = useCallback(() => {
     if (index > 0) setIndex(index - 1);
   }, [index]);
+
+  const goTo = useCallback(
+    (pos1: number) => {
+      if (!Number.isFinite(pos1)) return;
+      const clamped = Math.min(Math.max(Math.trunc(pos1), 1), activeSet.length);
+      setIndex(clamped - 1);
+    },
+    [activeSet.length],
+  );
 
   const restart = useCallback(() => {
     setResults({});
@@ -758,6 +768,63 @@ export default function QuizApp() {
         />
       </div>
 
+      {/* Navigator: prev · jump to any question · next (always available) */}
+      <div className="mx-auto mt-4 flex max-w-3xl items-center justify-center gap-2">
+        <button
+          type="button"
+          onClick={goPrev}
+          disabled={index === 0}
+          aria-label="Previous question"
+          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-zinc-500 ring-1 ring-zinc-300 transition-colors hover:bg-zinc-100 disabled:cursor-default disabled:opacity-40 dark:text-zinc-400 dark:ring-zinc-700 dark:hover:bg-zinc-800"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </button>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const n = parseInt(jumpValue, 10);
+            if (!Number.isNaN(n)) goTo(n);
+            setJumpValue("");
+          }}
+          className="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1.5 ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-700"
+        >
+          <span className="pl-1 text-xs text-zinc-400">Go to</span>
+          <input
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={total}
+            value={jumpValue}
+            onChange={(e) => setJumpValue(e.target.value)}
+            placeholder={String(index + 1)}
+            className="h-7 w-14 rounded-md bg-zinc-50 text-center text-sm font-semibold outline-none ring-1 ring-zinc-200 focus:ring-2 focus:ring-[#04AAFB] dark:bg-zinc-800 dark:ring-zinc-600"
+          />
+          <span className="text-xs text-zinc-400">/ {total}</span>
+          <button
+            type="submit"
+            className="ml-0.5 cursor-pointer rounded-full px-3 py-1 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+            style={{ background: ACCENT }}
+          >
+            Go
+          </button>
+        </form>
+
+        <button
+          type="button"
+          onClick={goNext}
+          aria-label="Next question"
+          className={`flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg ring-1 transition-colors ${
+            confirmed
+              ? "border-0 text-white ring-transparent"
+              : "text-zinc-500 ring-zinc-300 hover:bg-zinc-100 dark:text-zinc-400 dark:ring-zinc-700 dark:hover:bg-zinc-800"
+          }`}
+          style={confirmed ? { background: ACCENT } : undefined}
+        >
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+
       {/* Question card (original PDF rendering) */}
       <div className="mx-auto mt-5 max-w-3xl overflow-hidden rounded-2xl bg-white ring-1 ring-zinc-200/80 dark:ring-zinc-700">
         {qImages.length === 0 ? (
@@ -851,23 +918,14 @@ export default function QuizApp() {
           </p>
         )}
 
-        {/* Actions */}
-        <div className="mt-5 flex items-center gap-2">
-          <button
-            type="button"
-            onClick={goPrev}
-            disabled={index === 0}
-            className="inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-full px-4 text-sm font-medium text-zinc-600 ring-1 ring-zinc-300 transition-colors hover:bg-zinc-100 disabled:cursor-default disabled:opacity-40 dark:text-zinc-300 dark:ring-zinc-700 dark:hover:bg-zinc-800"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Prev
-          </button>
+        {/* Action: confirm, then advance */}
+        <div className="mt-5">
           {!confirmed ? (
             <button
               type="button"
               onClick={confirm}
               disabled={selected.length === 0}
-              className="inline-flex h-11 flex-1 cursor-pointer items-center justify-center rounded-full bg-zinc-900 px-6 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 disabled:cursor-default disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+              className="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-full bg-zinc-900 px-6 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 disabled:cursor-default disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
             >
               Confirm
             </button>
@@ -875,7 +933,7 @@ export default function QuizApp() {
             <button
               type="button"
               onClick={goNext}
-              className="inline-flex h-11 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-full px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
               style={{ background: ACCENT }}
             >
               {index + 1 < total ? "Next question" : "See results"}
@@ -906,7 +964,8 @@ export default function QuizApp() {
         )}
 
         <p className="mt-6 pb-4 text-center text-xs text-zinc-400 dark:text-zinc-600">
-          Keyboard: A–F select · Enter confirm / next · ← → navigate
+          Keyboard: A–F select · Enter confirm / next · ← → navigate · or jump
+          to any question above
         </p>
       </div>
     </Shell>
