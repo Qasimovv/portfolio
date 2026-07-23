@@ -787,23 +787,30 @@ export default function QuizApp() {
             if (!Number.isNaN(n)) goTo(n);
             setJumpValue("");
           }}
-          className="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1.5 ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-700"
+          className="flex items-center gap-2 rounded-2xl bg-white p-1.5 pl-3 ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-700"
         >
-          <span className="pl-1 text-xs text-zinc-400">Go to</span>
+          <span className="whitespace-nowrap text-sm text-zinc-400">
+            Go to #
+          </span>
           <input
-            type="number"
+            type="text"
             inputMode="numeric"
-            min={1}
-            max={total}
+            enterKeyHint="go"
             value={jumpValue}
-            onChange={(e) => setJumpValue(e.target.value)}
+            onChange={(e) =>
+              setJumpValue(e.target.value.replace(/[^0-9]/g, "").slice(0, 4))
+            }
+            onFocus={(e) => e.target.select()}
             placeholder={String(index + 1)}
-            className="h-7 w-14 rounded-md bg-zinc-50 text-center text-sm font-semibold outline-none ring-1 ring-zinc-200 focus:ring-2 focus:ring-[#04AAFB] dark:bg-zinc-800 dark:ring-zinc-600"
+            aria-label={`Jump to a question (1 to ${total})`}
+            className="h-10 w-20 rounded-xl bg-zinc-100 text-center text-lg font-semibold tabular-nums outline-none ring-1 ring-zinc-200 transition-shadow placeholder:font-normal placeholder:text-zinc-300 focus:ring-2 focus:ring-[#04AAFB] dark:bg-zinc-800 dark:ring-zinc-600 dark:placeholder:text-zinc-600"
           />
-          <span className="text-xs text-zinc-400">/ {total}</span>
+          <span className="whitespace-nowrap text-sm text-zinc-400">
+            / {total}
+          </span>
           <button
             type="submit"
-            className="ml-0.5 cursor-pointer rounded-full px-3 py-1 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+            className="h-10 cursor-pointer rounded-xl px-4 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             style={{ background: ACCENT }}
           >
             Go
