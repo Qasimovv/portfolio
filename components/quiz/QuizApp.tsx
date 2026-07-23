@@ -20,15 +20,39 @@ import {
   renderSegments,
   type QuizQuestion,
 } from "@/components/quiz/parsePdf";
+import {
+  clearAll as clearStore,
+  deleteDoc as deleteStoredDoc,
+  getAllDocs,
+  getSession,
+  saveDoc,
+  saveSession,
+} from "@/components/quiz/quizStore";
+
+function newId(): string {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return `d${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+  }
+}
 
 // -------------------- PDF Quiz Trainer --------------------
 //  Upload one or more Q&A PDFs → practice question by question, or build a
 //  random N-question quiz from the combined pool. Everything runs in the
 //  browser; files are never uploaded anywhere.
 
-type Stage = "idle" | "parsing" | "setup" | "ready" | "done" | "error";
+type Stage =
+  | "idle"
+  | "restoring"
+  | "parsing"
+  | "setup"
+  | "ready"
+  | "done"
+  | "error";
 type Result = { chosen: string[]; confirmed: boolean; correct: boolean };
 type LoadedDoc = {
+  id: string;
   pdf: PDFDocumentProxy;
   name: string;
   questions: QuizQuestion[];
@@ -93,12 +117,18 @@ export default function QuizApp() {
             done: 0, total: 0,
           });
           const buf = await file.arrayBuffer();
+          const storeBuf = buf.slice(0); // keep an intact copy for persistence
           const pdf = await loadPdf(buf);
           const parsed = await parseQuiz(pdf, (done, total) =>
             setProgress((p) => ({ ...p, done, total })),
           );
+          const id = newId();
+          void saveDoc({
+            id, name: file.name, buffer: storeBuf,
+            questions: parsed.questions, skipped: parsed.skipped,
+          });
           added.push({
-            pdf, name: file.name,
+            id, pdf, name: file.name,
             questions: parsed.questions, skipped: parsed.skipped,
           });
         }
@@ -130,36 +160,112 @@ export default function QuizApp() {
     [parseFiles],
   );
 
-  // Optional ?src=/path.pdf loader (same-origin only)
-  const srcLoaded = useRef(false);
+  // On mount: load ?src=/path.pdf if given, otherwise resume the saved session.
+  const bootDone = useRef(false);
   useEffect(() => {
-    if (srcLoaded.current) return;
+    if (bootDone.current) return;
+    bootDone.current = true;
     const src = new URLSearchParams(window.location.search).get("src");
-    if (!src || !src.startsWith("/")) return;
-    srcLoaded.current = true;
-    setStage("parsing");
-    setProgress({ file: src, fileIdx: 1, fileCount: 1, done: 0, total: 0 });
-    fetch(src)
-      .then((r) => {
-        if (!r.ok) throw new Error(`Could not fetch ${src}`);
-        return r.arrayBuffer();
-      })
-      .then(async (buf) => {
-        const pdf = await loadPdf(buf);
-        const parsed = await parseQuiz(pdf, (done, total) =>
-          setProgress((p) => ({ ...p, done, total })),
+
+    if (src && src.startsWith("/")) {
+      setStage("parsing");
+      setProgress({ file: src, fileIdx: 1, fileCount: 1, done: 0, total: 0 });
+      fetch(src)
+        .then((r) => {
+          if (!r.ok) throw new Error(`Could not fetch ${src}`);
+          return r.arrayBuffer();
+        })
+        .then(async (buf) => {
+          const pdf = await loadPdf(buf);
+          const parsed = await parseQuiz(pdf, (done, total) =>
+            setProgress((p) => ({ ...p, done, total })),
+          );
+          setDocs([{
+            id: newId(), pdf, name: src.split("/").pop() || "quiz.pdf",
+            questions: parsed.questions, skipped: parsed.skipped,
+          }]);
+          setStage("setup");
+        })
+        .catch((e) => {
+          setError(e instanceof Error ? e.message : "Fetch failed");
+          setStage("error");
+        });
+      return;
+    }
+
+    // Resume from IndexedDB
+    (async () => {
+      const session = await getSession();
+      if (!session || !session.docIds?.length) return; // stay idle
+      setStage("restoring");
+      try {
+        const records = await getAllDocs();
+        const byId = new Map(records.map((r) => [r.id, r]));
+        const ordered: LoadedDoc[] = [];
+        for (const id of session.docIds) {
+          const r = byId.get(id);
+          if (!r) continue;
+          const pdf = await loadPdf(r.buffer.slice(0));
+          ordered.push({
+            id: r.id, pdf, name: r.name,
+            questions: r.questions, skipped: r.skipped,
+          });
+        }
+        if (ordered.length === 0) {
+          setStage("idle");
+          return;
+        }
+        const docIndexById = new Map(ordered.map((d, i) => [d.id, i]));
+        const set: PoolItem[] = [];
+        for (const o of session.order ?? []) {
+          const di = docIndexById.get(o.docId);
+          if (di == null) continue;
+          const q = ordered[di].questions.find((x) => x.number === o.num);
+          if (q) set.push({ docIndex: di, q });
+        }
+        setDocs(ordered);
+        setActiveSet(set);
+        setResults(session.results ?? {});
+        setQuizCount(session.quizCount ?? 20);
+        const resumeStage =
+          set.length > 0 && (session.stage === "ready" || session.stage === "done")
+            ? session.stage
+            : "setup";
+        setIndex(
+          resumeStage === "ready"
+            ? Math.min(session.index ?? 0, Math.max(0, set.length - 1))
+            : 0,
         );
-        setDocs([{
-          pdf, name: src.split("/").pop() || "quiz.pdf",
-          questions: parsed.questions, skipped: parsed.skipped,
-        }]);
-        setStage("setup");
-      })
-      .catch((e) => {
-        setError(e instanceof Error ? e.message : "Fetch failed");
-        setStage("error");
-      });
+        setStage(resumeStage);
+      } catch {
+        setStage("idle");
+      }
+    })();
   }, []);
+
+  // Persist the session whenever meaningful state changes
+  useEffect(() => {
+    if (
+      docs.length === 0 ||
+      stage === "idle" ||
+      stage === "restoring" ||
+      stage === "parsing" ||
+      stage === "error"
+    ) {
+      return;
+    }
+    void saveSession({
+      docIds: docs.map((d) => d.id),
+      order: activeSet.map((p) => ({
+        docId: docs[p.docIndex].id,
+        num: p.q.number,
+      })),
+      index,
+      results,
+      quizCount,
+      stage,
+    });
+  }, [stage, docs, activeSet, index, results, quizCount]);
 
   // ---- Session builders ----
 
@@ -188,8 +294,12 @@ export default function QuizApp() {
     setDocs((prev) => {
       const doc = prev[di];
       doc?.pdf.destroy().catch(() => {});
+      if (doc) void deleteStoredDoc(doc.id);
       const next = prev.filter((_, i) => i !== di);
-      if (next.length === 0) setStage("idle");
+      if (next.length === 0) {
+        void clearStore();
+        setStage("idle");
+      }
       return next;
     });
   }, []);
@@ -197,6 +307,7 @@ export default function QuizApp() {
   const resetAll = useCallback(() => {
     docs.forEach((d) => d.pdf.destroy().catch(() => {}));
     clearRenderCache();
+    void clearStore();
     setDocs([]);
     setActiveSet([]);
     setResults({});
@@ -356,6 +467,22 @@ export default function QuizApp() {
               e.target.value = "";
             }}
           />
+        </div>
+      </Shell>
+    );
+  }
+
+  if (stage === "restoring") {
+    return (
+      <Shell>
+        <div className="mx-auto mt-10 max-w-lg rounded-3xl bg-white p-10 text-center ring-1 ring-zinc-200/70 dark:bg-zinc-900 dark:ring-zinc-800">
+          <h1 className="text-xl font-bold tracking-tight">
+            Restoring your session…
+          </h1>
+          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+            Picking up right where you left off.
+          </p>
+          <div className="mx-auto mt-6 h-8 w-8 animate-spin rounded-full border-2 border-zinc-200 border-t-[#04AAFB] dark:border-zinc-700 dark:border-t-[#04AAFB]" />
         </div>
       </Shell>
     );
